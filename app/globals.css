@@ -1,26 +1,110 @@
-@import "tailwindcss";
+@import "@heroui/styles";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ===== EPHRATA BRAND THEME ===== */
+@layer base {
+  :root,
+  .light,
+  [data-theme="light"] {
+    /* Brand palette */
+    --brand-purple: oklch(0.32 0.145 345);
+    --brand-orange: oklch(0.70 0.165 50);
+    --brand-purple-light: oklch(0.94 0.025 345);
+    --brand-orange-light: oklch(0.97 0.025 60);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+    /* Override HeroUI accent → brand orange */
+    --accent: oklch(0.70 0.165 50);
+    --accent-foreground: oklch(1 0 0);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Warm background */
+    --background: oklch(0.9985 0.005 80);
+    --surface: oklch(1 0 0);
+
+    /* Radius */
+    --radius: 0.75rem;
   }
 }
 
+@theme inline {
+  --font-display: var(--font-baloo2);
+  --font-sans: var(--font-nunito);
+  --color-brand-purple: oklch(0.32 0.145 345);
+  --color-brand-orange: oklch(0.70 0.165 50);
+  --color-brand-purple-light: oklch(0.94 0.025 345);
+  --color-brand-orange-light: oklch(0.97 0.025 60);
+}
+
+/* ===== GLOBAL STYLES ===== */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-nunito), 'Nunito', sans-serif;
+  background-color: oklch(var(--background));
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-baloo2), 'Baloo 2', sans-serif;
+}
+
+/* ===== CUSTOM UTILITIES ===== */
+@layer utilities {
+  .bg-brand-purple { background-color: #6B1645; }
+  .bg-brand-orange { background-color: #F5821F; }
+  .text-brand-purple { color: #6B1645; }
+  .text-brand-orange { color: #F5821F; }
+  .border-brand-purple { border-color: #6B1645; }
+  .border-brand-orange { border-color: #F5821F; }
+
+  .bg-purple-tint { background-color: #F9EEF6; }
+  .bg-orange-tint { background-color: #FEF3E8; }
+
+  .gradient-brand {
+    background: linear-gradient(135deg, #6B1645 0%, #9B2765 50%, #F5821F 100%);
+  }
+
+  .gradient-hero {
+    background: radial-gradient(ellipse at top left, #8B1D5A 0%, #6B1645 40%, #4A0F30 100%);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #6B1645, #F5821F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .wave-top {
+    clip-path: ellipse(100% 60% at 50% 100%);
+  }
+
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .float-slow {
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .float-fast {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-12px) rotate(2deg); }
+    66% { transform: translateY(-6px) rotate(-2deg); }
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 }
