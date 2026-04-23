@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { IconMenu2, IconX, IconPhone } from "@tabler/icons-react";
 import Image from "next/image";
 
@@ -10,6 +13,9 @@ const links = [
   { label: "À propos", href: "#about" },
   { label: "Apprentissage", href: "#learning" },
   { label: "Vie scolaire", href: "#gallery" },
+  { label: "Classes", href: "/classes" },
+  { label: "Palmarès", href: "/palmares" },
+  { label: "Galerie", href: "/galerie" },
   { label: "Témoignages", href: "#testimonials" },
   { label: "Contact", href: "#contact" },
 ];
@@ -17,6 +23,30 @@ const links = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const headerRef = useRef<HTMLElement>(null);
+  const navListRef = useRef<HTMLUListElement>(null);
+  const logoRef = useRef<HTMLButtonElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  /* ── GSAP entrance animation ── */
+  useGSAP(() => {
+    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+    tl.from(logoRef.current, { opacity: 0, x: -30, duration: 0.6, delay: 0.1 })
+      .from(
+        navListRef.current ? Array.from(navListRef.current.children) : [],
+        { opacity: 0, y: -16, stagger: 0.07, duration: 0.45 },
+        "-=0.3"
+      )
+      .from(ctaRef.current?.children ?? [], {
+        opacity: 0,
+        x: 20,
+        stagger: 0.08,
+        duration: 0.45,
+      }, "-=0.4");
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -24,18 +54,30 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* Highlight active page link */
+  const isActive = (href: string) => {
+    if (href.startsWith("/")) return pathname === href;
+    return false;
+  };
+
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
+    if (href.startsWith("/")) {
+      router.push(href);
+      return;
+    }
+    if (pathname !== "/") {
+      router.push(`/${href}`);
+      return;
+    }
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+      <header
+        ref={headerRef}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
             ? "mx-4 mt-3 rounded-2xl bg-white/90 backdrop-blur-md shadow-lg border border-white/50"
@@ -45,6 +87,7 @@ export default function Navbar() {
         <nav className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto">
           {/* Logo */}
           <button
+            ref={logoRef}
             onClick={() => handleNavClick("#hero")}
             className="flex items-center gap-3 group cursor-pointer"
           >
@@ -67,25 +110,37 @@ export default function Navbar() {
           </button>
 
           {/* Desktop Nav */}
-          <ul className="hidden lg:flex items-center gap-1">
+          <ul ref={navListRef} className="hidden lg:flex items-center gap-1">
             {links.map((link) => (
-              <li key={link.href}>
+              <li key={link.href} className="relative">
                 <button
                   onClick={() => handleNavClick(link.href)}
                   className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer hover:bg-white/20 ${
                     scrolled
-                      ? "text-gray-700 hover:text-[#6B1645] hover:bg-[#F9EEF6]"
-                      : "text-white/90 hover:text-white"
+                      ? isActive(link.href)
+                        ? "text-[#6B1645] bg-[#F9EEF6]"
+                        : "text-gray-700 hover:text-[#6B1645] hover:bg-[#F9EEF6]"
+                      : isActive(link.href)
+                        ? "text-white"
+                        : "text-white/90 hover:text-white"
                   }`}
                 >
                   {link.label}
+                  {/* Active underline indicator */}
+                  {isActive(link.href) && (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-0.5 rounded-full bg-[#F5821F]"
+                      transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                    />
+                  )}
                 </button>
               </li>
             ))}
           </ul>
 
           {/* CTA + Hamburger */}
-          <div className="flex items-center gap-3">
+          <div ref={ctaRef} className="flex items-center gap-3">
             <a
               href="tel:+000000000"
               className={`hidden md:flex items-center gap-2 text-sm font-semibold transition-colors ${
@@ -112,7 +167,7 @@ export default function Navbar() {
             </button>
           </div>
         </nav>
-      </motion.header>
+      </header>
 
       {/* Mobile Menu */}
       <AnimatePresence>

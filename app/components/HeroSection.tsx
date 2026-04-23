@@ -1,7 +1,11 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import {
   IconStar,
   IconArrowDown,
@@ -9,6 +13,8 @@ import {
   IconPencil,
   IconBrush,
 } from "@tabler/icons-react";
+
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 function FloatingShape({
   className,
@@ -37,12 +43,103 @@ function FloatingShape({
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const blobsRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    const ctx = gsap.context(() => {
+      /* ── 1. Badge pop-in ── */
+      gsap.from(badgeRef.current, {
+        opacity: 0,
+        scale: 0.75,
+        duration: 0.6,
+        delay: 0.2,
+        ease: "back.out(1.7)",
+      });
+
+      /* ── 2. Heading — SplitText lettre par lettre ── */
+      if (headingRef.current) {
+        const split = new SplitText(headingRef.current, {
+          type: "chars,words",
+        });
+        gsap.from(split.chars, {
+          opacity: 0,
+          y: 60,
+          rotateX: -90,
+          stagger: 0.022,
+          duration: 0.65,
+          delay: 0.5,
+          ease: "back.out(1.4)",
+          transformOrigin: "0% 50% -50",
+        });
+      }
+
+      /* ── 3. Subtitle words ── */
+      if (subtitleRef.current) {
+        const splitSub = new SplitText(subtitleRef.current, { type: "words" });
+        gsap.from(splitSub.words, {
+          opacity: 0,
+          y: 20,
+          stagger: 0.04,
+          duration: 0.5,
+          delay: 1.1,
+          ease: "power3.out",
+        });
+      }
+
+      /* ── 4. CTA buttons ── */
+      gsap.from(ctaRef.current?.children ?? [], {
+        opacity: 0,
+        y: 30,
+        stagger: 0.12,
+        duration: 0.6,
+        delay: 1.5,
+        ease: "power3.out",
+      });
+
+      /* ── 5. Stats counter ── */
+      gsap.from(statsRef.current?.children ?? [], {
+        opacity: 0,
+        y: 25,
+        stagger: 0.1,
+        duration: 0.5,
+        delay: 1.8,
+        ease: "power3.out",
+      });
+
+      /* ── 6. Parallax blobs on scroll ── */
+      if (blobsRef.current && sectionRef.current) {
+        gsap.to(blobsRef.current, {
+          y: "28%",
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1.2,
+          },
+        });
+      }
+
+      /* ── 7. Section fade-out on scroll ── */
+      gsap.to(sectionRef.current, {
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "60% top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -54,57 +151,36 @@ export default function HeroSection() {
           "radial-gradient(ellipse at top left, #8B2260 0%, #6B1645 45%, #4A0F30 100%)",
       }}
     >
-      {/* Animated background blobs */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ y, opacity }}
-      >
+      {/* Parallax blobs */}
+      <div ref={blobsRef} className="absolute inset-0 pointer-events-none">
         <div
-          className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full opacity-20"
-          style={{
-            background:
-              "radial-gradient(circle, #F5821F 0%, transparent 70%)",
-          }}
+          className="absolute top-[-10%] right-[-5%] w-150 h-150 rounded-full opacity-20"
+          style={{ background: "radial-gradient(circle, #F5821F 0%, transparent 70%)" }}
         />
         <div
-          className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-15"
-          style={{
-            background:
-              "radial-gradient(circle, #F5821F 0%, transparent 70%)",
-          }}
+          className="absolute bottom-[10%] left-[-10%] w-125 h-125 rounded-full opacity-15"
+          style={{ background: "radial-gradient(circle, #F5821F 0%, transparent 70%)" }}
         />
         <div
-          className="absolute top-[40%] left-[30%] w-[400px] h-[400px] rounded-full opacity-10"
-          style={{
-            background:
-              "radial-gradient(circle, #ffffff 0%, transparent 70%)",
-          }}
+          className="absolute top-[40%] left-[30%] w-100 h-100 rounded-full opacity-10"
+          style={{ background: "radial-gradient(circle, #ffffff 0%, transparent 70%)" }}
         />
-      </motion.div>
+      </div>
 
       {/* Floating decorative elements */}
-      <FloatingShape
-        className="top-[15%] left-[8%] text-white/20"
-        delay={0}
-      >
+      <FloatingShape className="top-[15%] left-[8%] text-white/20" delay={0}>
         <div className="w-16 h-16 rounded-2xl border-2 border-white/30 flex items-center justify-center backdrop-blur-sm">
           <IconBook size={28} className="text-orange-300" />
         </div>
       </FloatingShape>
 
-      <FloatingShape
-        className="top-[25%] right-[10%] text-white/20"
-        delay={1.5}
-      >
+      <FloatingShape className="top-[25%] right-[10%] text-white/20" delay={1.5}>
         <div className="w-14 h-14 rounded-full border-2 border-orange-300/40 flex items-center justify-center">
           <IconPencil size={22} className="text-orange-200" />
         </div>
       </FloatingShape>
 
-      <FloatingShape
-        className="bottom-[30%] left-[5%]"
-        delay={2.5}
-      >
+      <FloatingShape className="bottom-[30%] left-[5%]" delay={2.5}>
         <div className="w-12 h-12 rounded-xl border-2 border-white/20 flex items-center justify-center">
           <IconBrush size={20} className="text-pink-200" />
         </div>
@@ -132,28 +208,21 @@ export default function HeroSection() {
       </div>
 
       {/* Main content */}
-      <motion.div
-        className="relative z-10 text-center px-6 max-w-5xl mx-auto"
-        style={{ opacity }}
-      >
+      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
         {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <div
+          ref={badgeRef}
           className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/15 backdrop-blur-sm border border-white/25 text-white/90 text-sm font-semibold mb-8"
         >
           <IconStar size={14} className="text-orange-300" fill="currentColor" />
           Groupe Scolaire Privé Ephrata
           <IconStar size={14} className="text-orange-300" fill="currentColor" />
-        </motion.div>
+        </div>
 
-        {/* Main heading */}
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          className="font-display font-extrabold text-white leading-tight mb-6"
+        {/* Main heading — GSAP SplitText */}
+        <h1
+          ref={headingRef}
+          className="font-display font-extrabold text-white leading-tight mb-6 perspective-midrange"
           style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)" }}
         >
           Là où les jeunes esprits{" "}
@@ -164,30 +233,24 @@ export default function HeroSection() {
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
             }}
+            className="text-white"
           >
             s&apos;épanouissent
           </span>{" "}
           avec joie
-        </motion.h1>
+        </h1>
 
         {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+        <p
+          ref={subtitleRef}
           className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10"
         >
           Une école primaire d&apos;excellence où chaque enfant découvre le
           monde avec curiosité, créativité et confiance.
-        </motion.p>
+        </p>
 
         {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
+        <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 justify-center">
           <motion.a
             href="#contact"
             onClick={(e) => {
@@ -212,13 +275,11 @@ export default function HeroSection() {
           >
             Découvrir notre école
           </motion.a>
-        </motion.div>
+        </div>
 
         {/* Stats row */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.1 }}
+        <div
+          ref={statsRef}
           className="mt-16 flex flex-wrap justify-center gap-8"
         >
           {[
@@ -234,8 +295,8 @@ export default function HeroSection() {
               <div className="text-white/60 text-sm mt-0.5">{stat.label}</div>
             </div>
           ))}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* Scroll indicator */}
       <motion.div
