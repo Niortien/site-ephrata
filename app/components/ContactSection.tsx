@@ -16,19 +16,22 @@ const contactInfo = [
   {
     icon: IconMapPin,
     label: "Adresse",
-    value: "Quartier Ephrata, Yaoundé, Cameroun",
+    value: "Riviera Faya Cocody, Abidjan — Côte d'Ivoire",
+    href: "https://share.google/RuZZsAC3JkY9nUVjr",
     color: "#6B1645",
   },
   {
     icon: IconPhone,
     label: "Téléphone",
-    value: "+237 6XX XXX XXX",
+    value: "(+225) 07 77 64 29 98 · 01 01 23 52 50",
+    href: "tel:+2250777642998",
     color: "#F5821F",
   },
   {
     icon: IconMail,
     label: "Email",
-    value: "contact@gspe-ephrata.cm",
+    value: "Ephratagroupescolaireprive@gmail.com",
+    href: "mailto:Ephratagroupescolaireprive@gmail.com",
     color: "#6B1645",
   },
   {
@@ -147,9 +150,18 @@ export default function ContactSection() {
                         <div className="text-white/60 text-xs mb-0.5">
                           {item.label}
                         </div>
-                        <div className="text-white font-semibold text-sm">
-                          {item.value}
-                        </div>
+                        {(item as { href?: string }).href ? (
+                          <a
+                            href={(item as { href?: string }).href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-white font-semibold text-sm hover:text-orange-200 transition-colors underline-offset-2 hover:underline"
+                          >
+                            {item.value}
+                          </a>
+                        ) : (
+                          <div className="text-white font-semibold text-sm">{item.value}</div>
+                        )}
                       </div>
                     </li>
                   );
@@ -157,25 +169,24 @@ export default function ContactSection() {
               </ul>
             </div>
 
-            {/* Map placeholder */}
-            <div
-              className="rounded-3xl overflow-hidden flex items-center justify-center"
-              style={{
-                height: "200px",
-                background: "linear-gradient(135deg, #F9EEF6, #FEF3E8)",
-                border: "2px dashed #E8C4D8",
-              }}
+            {/* Google Maps embed */}
+            <a
+              href="https://share.google/RuZZsAC3JkY9nUVjr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-3xl overflow-hidden border-2 border-white/20 hover:border-orange-300/60 transition-colors group"
+              style={{ height: "200px" }}
             >
-              <div className="text-center">
-                <IconMapPin size={36} className="text-[#6B1645] mx-auto mb-2" />
-                <p className="text-[#6B1645] font-semibold text-sm">
-                  Yaoundé, Cameroun
-                </p>
-                <p className="text-gray-400 text-xs mt-1">
-                  Carte interactive à venir
-                </p>
-              </div>
-            </div>
+              <iframe
+                title="Localisation Groupe Scolaire Privé Ephrata"
+                src="https://maps.google.com/maps?q=Riviera+Faya+Cocody+Abidjan&output=embed&z=15"
+                width="100%"
+                height="100%"
+                style={{ border: 0, pointerEvents: "none" }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </a>
           </motion.div>
 
           {/* Right: Form */}

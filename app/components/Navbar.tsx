@@ -13,10 +13,11 @@ const links = [
   // { label: "À propos", href: "#about" },
   { label: "Apprentissage", href: "#learning" },
   { label: "Vie scolaire", href: "#gallery" },
+  { label: "Infos parents", href: "#infos-parents" },
   { label: "Classes", href: "/classes" },
   { label: "Palmarès", href: "/palmares" },
   { label: "Galerie", href: "/galerie" },
-  { label: "Témoignages", href: "#testimonials" },
+  
   { label: "Contact", href: "#contact" },
 ];
 
@@ -45,6 +46,7 @@ export default function Navbar() {
         x: 20,
         stagger: 0.08,
         duration: 0.45,
+        clearProps: "opacity,transform",
       }, "-=0.4");
   }, []);
 
@@ -142,13 +144,13 @@ export default function Navbar() {
           {/* CTA + Hamburger */}
           <div ref={ctaRef} className="flex items-center gap-3">
             <a
-              href="tel:+000000000"
+              href="tel:+2250777642998"
               className={`hidden md:flex items-center gap-2 text-sm font-semibold transition-colors ${
                 scrolled ? "text-[#6B1645]" : "text-white/80"
               }`}
             >
               <IconPhone size={16} />
-              <span>Appelez-nous</span>
+              <span>07 77 64 29 98</span>
             </a>
             <button
               onClick={() => handleNavClick("#contact")}

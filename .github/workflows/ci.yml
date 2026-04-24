@@ -1,0 +1,74 @@
+name: CI — Lint, Type-check & Build
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Check & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── 2. Setup Node ────────────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # ── 3. Setup pnpm ────────────────────────────────────────────────
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10
+
+      # ── 4. Cache pnpm store ──────────────────────────────────────────
+      - name: Get pnpm store path
+        id: pnpm-cache
+        run: echo "STORE=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: pnpm-${{ runner.os }}-
+
+      # ── 5. Install dependencies ───────────────────────────────────────
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── 6. Type check ─────────────────────────────────────────────────
+      - name: TypeScript type check
+        run: pnpm exec tsc --noEmit
+
+      # ── 7. Lint ───────────────────────────────────────────────────────
+      - name: ESLint
+        run: pnpm lint
+
+      # ── 8. Build ──────────────────────────────────────────────────────
+      - name: Next.js build
+        run: pnpm build
+        env:
+          # Empêche le build de planter sur les warnings ESLint
+          NEXT_TELEMETRY_DISABLED: 1
+
+  # ── Job deploy (optionnel — décommentez et configurez selon votre hébergeur) ──
+  # deploy:
+  #   name: Deploy to Vercel
+  #   needs: ci
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/main'
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Deploy
+  #       run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+  #       env:
+  #         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  #         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

@@ -17,10 +17,10 @@ const baloo2 = Baloo_2({
 });
 
 export const metadata: Metadata = {
-  title: "Groupe Scolaire Privé Ephrata — Where young minds grow with joy",
+  title: "Groupe Scolaire Privé Ephrata — École maternelle et primaire à Abidjan",
   description:
-    "Groupe Scolaire Privé Ephrata — Une école primaire d'excellence alliant joie, créativité et rigueur académique.",
-  keywords: ["école primaire", "Ephrata", "GSPE", "éducation", "excellence"],
+    "Groupe Scolaire Privé Ephrata — Une école maternelle et primaire d’excellence à Abidjan, Côte d’Ivoire, alliant joie, créativité et rigueur académique.",
+  keywords: ["école maternelle", "école primaire", "Ephrata", "GSPE", "éducation", "Abidjan", "Côte d'Ivoire"],
 };
 
 export default function RootLayout({
@@ -33,7 +33,9 @@ export default function RootLayout({
       lang="fr"
       className={`${nunito.variable} ${baloo2.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col overflow-x-hidden">{children}</body>
+      <body className="min-h-full flex flex-col overflow-x-hidden">
+        {children}
+      </body>
     </html>
   );
 }

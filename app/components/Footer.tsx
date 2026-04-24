@@ -84,7 +84,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
-              Une école primaire d&apos;excellence où chaque enfant s&apos;épanouit
+              Une école maternelle et primaire d&apos;excellence où chaque enfant s&apos;épanouit
               avec joie, curiosité et confiance depuis plus de 15 ans.
             </p>
 
@@ -134,9 +134,10 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-4">
               {[
-                { icon: IconMapPin, text: "Quartier Ephrata, Yaoundé" },
-                { icon: IconPhone, text: "+237 6XX XXX XXX" },
-                { icon: IconMail, text: "contact@gspe-ephrata.cm" },
+                { icon: IconMapPin, text: "Riviera Faya Cocody, Abidjan — Côte d'Ivoire" },
+                { icon: IconPhone, text: "(+225) 07 77 64 29 98" },
+                { icon: IconPhone, text: "(+225) 01 01 23 52 50" },
+                { icon: IconMail, text: "Ephratagroupescolaireprive@gmail.com" },
               ].map(({ icon: Icon, text }) => (
                 <li key={text} className="flex items-start gap-3">
                   <Icon size={16} className="text-[#F5821F] mt-0.5 shrink-0" />

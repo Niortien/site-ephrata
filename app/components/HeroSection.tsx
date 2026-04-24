@@ -109,6 +109,7 @@ export default function HeroSection() {
         duration: 0.5,
         delay: 1.8,
         ease: "power3.out",
+        clearProps: "opacity,transform",
       });
 
       /* ── 6. Parallax blobs on scroll ── */
@@ -237,7 +238,7 @@ export default function HeroSection() {
           ref={subtitleRef}
           className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-10"
         >
-          Une école primaire d&apos;excellence où chaque enfant découvre le
+          Une école maternelle et primaire d&apos;excellence où chaque enfant découvre le
           monde avec curiosité, créativité et confiance.
         </p>
 
@@ -280,11 +281,24 @@ export default function HeroSection() {
             { number: "15+", label: "Années d'excellence" },
             { number: "98%", label: "Parents satisfaits" },
           ].map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="text-3xl font-extrabold text-white font-display">
+            <div
+              key={stat.label}
+              className="text-center px-5 py-3 rounded-2xl"
+              style={{
+                background: "rgba(255,255,255,0.12)",
+                border: "1px solid rgba(255,255,255,0.20)",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <div
+                className="text-3xl font-extrabold font-display"
+                style={{ color: "#FFB347" }}
+              >
                 {stat.number}
               </div>
-              <div className="text-white/60 text-sm mt-0.5">{stat.label}</div>
+              <div className="text-white text-sm font-medium mt-0.5">
+                {stat.label}
+              </div>
             </div>
           ))}
         </div>

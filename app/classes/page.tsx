@@ -311,7 +311,7 @@ const classes: ClassLevel[] = [
     skills: [
       "Rédaction & dissertation",
       "Résolution de problèmes",
-      "Géographie du Cameroun",
+      "Géographie de la Côte d'Ivoire",
       "Anglais intermédiaire",
       "Orientation & bilan scolaire",
     ],
