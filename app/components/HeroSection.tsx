@@ -226,15 +226,7 @@ export default function HeroSection() {
           style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)" }}
         >
           Là où les jeunes esprits{" "}
-          <span
-            style={{
-              background: "linear-gradient(135deg, #F5821F, #FFB347)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-            className="text-white"
-          >
+          <span style={{ color: "#F5821F" }}>
             s&apos;épanouissent
           </span>{" "}
           avec joie

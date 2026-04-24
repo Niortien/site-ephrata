@@ -10,7 +10,7 @@ import Image from "next/image";
 
 const links = [
   { label: "Accueil", href: "#hero" },
-  { label: "À propos", href: "#about" },
+  // { label: "À propos", href: "#about" },
   { label: "Apprentissage", href: "#learning" },
   { label: "Vie scolaire", href: "#gallery" },
   { label: "Classes", href: "/classes" },

@@ -108,9 +108,8 @@ export default function PalmaresPage() {
             className="flex flex-wrap justify-center gap-4 mt-8"
           >
             {[
-              { v: "100%", l: "CEP 2025", e: "🏆" },
-              { v: "97%", l: "BEPC 2025", e: "🥇" },
-              { v: "5 ans", l: "Sans échec au CEP", e: "⭐" },
+              { v: "100%", l: "CEPE 2025", e: "🏆" },
+              { v: "5 ans", l: "Sans échec au CEPE", e: "⭐" },
               { v: "58", l: "Admis 2025", e: "🎓" },
             ].map((s) => (
               <div
@@ -179,7 +178,7 @@ export default function PalmaresPage() {
                 Taux de réussite aux examens
               </h2>
               <p className="text-gray-400 text-sm md:text-base mt-2 max-w-xl mx-auto">
-                CEP et BEPC — 5 dernières années scolaires (2020–2025)
+                CEPE — 5 dernières années scolaires (2020–2025)
               </p>
             </>
           )}
@@ -192,7 +191,7 @@ export default function PalmaresPage() {
                 Lauréats des examens officiels
               </h2>
               <p className="text-gray-400 text-sm md:text-base mt-2 max-w-xl mx-auto">
-                Les élèves les plus brillants aux examens CEP &amp; BEPC ces 3 dernières années
+                Les élèves les plus brillants au CEPE ces 3 dernières années
               </p>
             </>
           )}

@@ -17,11 +17,11 @@ import {
 import { motion } from "framer-motion";
 
 const data = [
-  { annee: "2020–21", CEP: 94, BEPC: 88, admis: 42, presents: 45 },
-  { annee: "2021–22", CEP: 96, BEPC: 91, admis: 47, presents: 49 },
-  { annee: "2022–23", CEP: 97, BEPC: 89, admis: 50, presents: 52 },
-  { annee: "2023–24", CEP: 100, BEPC: 95, admis: 54, presents: 54 },
-  { annee: "2024–25", CEP: 100, BEPC: 97, admis: 58, presents: 58 },
+  { annee: "2020–21", CEPE: 94, admis: 42, presents: 45 },
+  { annee: "2021–22", CEPE: 96, admis: 47, presents: 49 },
+  { annee: "2022–23", CEPE: 97, admis: 50, presents: 52 },
+  { annee: "2023–24", CEPE: 100, admis: 54, presents: 54 },
+  { annee: "2024–25", CEPE: 100, admis: 58, presents: 58 },
 ];
 
 /* ─── Custom Tooltip ─────────────────────────────────────────────────── */
@@ -74,8 +74,7 @@ export default function ExamStatsChart() {
     <div className="space-y-8">
       {/* Mini stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <MiniStat label="Taux CEP 2025" value="100%" sub="5 ans consécutifs" color="#16a34a" />
-        <MiniStat label="Taux BEPC 2025" value="97%" sub="Meilleur résultat" color="#F5821F" />
+        <MiniStat label="Taux CEPE 2025" value="100%" sub="5 ans consécutifs" color="#16a34a" />
         <MiniStat label="Admis 2025" value="58" sub="sur 58 présentés" color="#6B1645" />
         <MiniStat label="Mention TB" value="34" sub="élèves primés" color="#1d4ed8" />
       </div>
@@ -93,7 +92,7 @@ export default function ExamStatsChart() {
             Graphique 1
           </span>
           <h3 className="font-display font-extrabold text-xl text-gray-900 mt-1">
-            Taux de réussite CEP &amp; BEPC — 5 dernières années
+            Taux de réussite CEPE — 5 dernières années
           </h3>
           <p className="text-sm text-gray-400 mt-1">
             Pourcentage d&apos;élèves admis sur le total des présentés
@@ -123,8 +122,7 @@ export default function ExamStatsChart() {
               wrapperStyle={{ fontSize: 12, paddingTop: 16, fontWeight: 600 }}
             />
             <ReferenceLine y={100} stroke="#16a34a" strokeDasharray="4 4" strokeWidth={1.5} />
-            <Bar dataKey="CEP" name="Taux CEP (%)" fill="#6B1645" radius={[8, 8, 0, 0]} />
-            <Bar dataKey="BEPC" name="Taux BEPC (%)" fill="#F5821F" radius={[8, 8, 0, 0]} />
+            <Bar dataKey="CEPE" name="Taux CEPE (%)" fill="#6B1645" radius={[8, 8, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </motion.div>
